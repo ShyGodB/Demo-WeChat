@@ -1,0 +1,47 @@
+#msg-box {
+  padding: 20px;
+}
+
+#send-box {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.user-input {
+  width: 200px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+}
+.sure {
+  text-align: center;
+  float: right;
+}
+
+.place-input {
+  color: #ff6600;
+}
+
+.item {
+  border-bottom: 1px solid #ccc;
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 6px;
+}
+
+.msg-1 {
+  float: left;
+}
+
+.close-button {
+  float: right;
+}
+
+.list-view {
+  margin: 20px 0 0 0;
+}
+
+.msg-info {
+  margin: 10px 0 0 0;
+  color: #339900;
+}

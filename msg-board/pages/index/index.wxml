@@ -1,0 +1,15 @@
+<view id="msg-box">
+  <view id="send-box">
+    <input bindinput='changeInputValue' value="{{inputValue}}" class="user-input" type="text" placeholder='请留言' placeholder-class='place-input'></input>
+    <button class="sure" type="primary" size="mini" bindtap='addMsg'> 留言 </button>
+  </view>
+
+  <text wx:if="{{msg.length === 0}}"> 暂无留言...^_^ </text>
+
+  <view id="list-view">
+    <view class="item" wx:for="{{msg}}" wx:key="{{index}}">
+      <text calss="msg-1"> {{item.msg}} </text>
+      <button data-index="{{index}}" bindtap='delMsg' class="close-button" type="default" size="mini"> 删除 </button>
+    </view>
+  </view>
+</view>
