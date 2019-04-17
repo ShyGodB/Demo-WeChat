@@ -1,0 +1,40 @@
+<!--index.wxml-->
+<view class="index">
+
+    <view class="index-title">
+        <rich-text nodes="{{html}}" space="ensp"></rich-text>
+    </view>
+
+    <view class="price">
+        <view class="price__title"> 油价（元/升）： </view>
+        <view class="section">
+            <picker bindchange="bindPickerChange" value="{{index}}" range="{{gasoline}}" range-key="type">
+                <view class="picker">
+                当前选择：{{gasoline[index].type}}
+                </view>
+            </picker>
+            <input class="gasolinePrice" bindinput='changePrice' id="{{index}}" value="{{gasoline[index].price}}" type="digit" placeholder="当前油价" placeholder-class="place-price"></input>
+        </view>
+    </view>
+
+    <view class="amount">
+        <view class="amount__title"> 耗油量（升/公里） </view>
+        <input class="gasolineAmount" bindinput='changeAmount' value="{{amount}}" type="digit" placeholder="每公里耗油" placeholder-class='place-amount'></input>
+    </view>
+
+    <view class="trip">
+        <view class="trip_title"> 行程（公里） </view>
+        <input class="tripAmount" bindinput='changeTrip' value="{{trip}}" type="digit" placeholder="行程数" placeholder-class='place-trip'></input>
+    </view>
+
+    <view class="results" wx:if="{{result.length !== 0}}">
+        <text> 结果: </text>
+        <text class="spending"> {{result}} </text> 
+        <text> 元 </text>
+    </view>
+
+    <view class="calculate">
+        <button type="primary" size="mini" bindtap='calculate'> 计算 </button>
+    </view>
+
+</view>
