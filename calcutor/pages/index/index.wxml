@@ -34,7 +34,7 @@
     </view>
 
     <view class="calculate">
-        <button type="primary" size="mini" bindtap='calculate'> 计算 </button>
+        <button type="primary" size="mini" bindtap='uploadData'> 计算 </button>
     </view>
 
 </view>

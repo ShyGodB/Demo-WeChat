@@ -64,4 +64,30 @@ Page({
             index: e.detail.value
         })
     },
+    uploadData() {
+        const index = Number(this.data.index);
+        const price = this.data.gasoline[index].price;
+        const amount = Number(this.data.amount);
+        const trip = Number(this.data.trip);
+        const result = price * amount * trip;
+        wx.request({
+            url: 'http://localhost:3000/index',
+            data: {
+                result: result
+            },
+            header: {
+                "Content-Type": "application/json"
+            },
+            method: "post",
+            success(res) {
+                console.log(res.data);
+            },
+            fail(err) {
+                console.log(err);
+            },
+            complete() {
+                console.log("成功");
+            }
+        })
+    }
 })
