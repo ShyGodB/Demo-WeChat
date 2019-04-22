@@ -10,10 +10,10 @@
         <view class="section">
             <picker bindchange="bindPickerChange" value="{{index}}" range="{{gasoline}}" range-key="type">
                 <view class="picker">
-                当前选择：{{gasoline[index].type}}
+                当前选择：{{onOff === true? gasoline[index].type : gasolineType}}
                 </view>
             </picker>
-            <input class="gasolinePrice" bindinput='changePrice' id="{{index}}" value="{{gasoline[index].price}}" type="digit" placeholder="当前油价" placeholder-class="place-price"></input>
+            <input class="gasolinePrice" bindinput='changePrice' id="{{index}}" value="{{onOff === true? gasoline[index].price : gasolinePrice}}" type="digit" placeholder="当前油价" placeholder-class="place-price" disabled></input>
         </view>
     </view>
 

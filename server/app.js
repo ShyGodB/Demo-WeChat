@@ -4,7 +4,6 @@ const json = require('koa-json');
 const render = require('koa-ejs');
 const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
-const fs = require("fs");
 
 const app = new Koa();
 const router = new Router();

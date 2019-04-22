@@ -32,7 +32,10 @@ Page({
         index: "",
         amount: "",
         trip: "",
-        result: ""
+        result: "",
+        gasolineType: "",
+        gasolinePrice: '',
+        onOff: false
     },
     changePrice(ev) {
         this.setData({
@@ -59,35 +62,48 @@ Page({
         });
     },
     bindPickerChange(e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value)
+        // console.log('picker发送选择改变，携带值为', e.detail.value)
         this.setData({
+            onOff: true,
             index: e.detail.value
         })
     },
     uploadData() {
+        const that = this;
         const index = Number(this.data.index);
         const price = this.data.gasoline[index].price;
         const amount = Number(this.data.amount);
         const trip = Number(this.data.trip);
         const result = price * amount * trip;
+        console.log(result);
         wx.request({
-            url: 'http://localhost:3000/index',
+            url: 'https://www.tripspend.com:8888/index',
+            method: "post",
             data: {
                 result: result
             },
             header: {
                 "Content-Type": "application/json"
             },
-            method: "post",
             success(res) {
                 console.log(res.data);
+                that.setData({
+                    result: result
+                })
+                // console.log(this)
             },
             fail(err) {
                 console.log(err);
             },
             complete() {
-                console.log("成功");
+                console.log("完成");
             }
+        })
+    },
+    onLoad() {
+        this.setData({
+            gasolineType: this.data.gasoline[0].type,
+            gasolinePrice: this.data.gasoline[0].price
         })
     }
 })
