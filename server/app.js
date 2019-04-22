@@ -29,10 +29,15 @@ router.get("/", async (ctx) => {
      await ctx.render("index");
 });
 
+router.post("/index", async (ctx) => {
+    const data = ctx.request.body;
+    ctx.body = {msg: "成功"};
+})
+
 
 
 app.use(router.routes()).use(router.allowedMethods);
 
-app.listen(3000, () => {
-    console.log("Server is running at http://127.0.0.1:3000");
+app.listen(8080, () => {
+    console.log("Server is running at http://127.0.0.1:8080");
 });
