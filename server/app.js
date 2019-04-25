@@ -30,10 +30,15 @@ router.get("/", async (ctx) => {
 
 router.post("/index", async (ctx) => {
     const data = ctx.request.body;
+    console.log(data);
     ctx.body = {msg: "成功"};
 })
 
-
+router.post("/user", async (ctx) => {
+    const userInfo = ctx.request.body;
+    console.log(userInfo);
+    ctx.body = {msg: "成功"};
+});
 
 app.use(router.routes()).use(router.allowedMethods);
 
