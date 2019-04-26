@@ -1,36 +1,67 @@
-/**index.wxss**/
-.price, .amount, .trip, .results {
-     /* display: inline-flex; */
+/* CSS顺序 => 全局 -> 从上向下 */
+/* 全局 */
+.topBox, .mainBox, .bottomBox {
+    width: 100%;
+    display: flex;
     margin-bottom: 60rpx;
 }
 
-.price_title, amount_title, .text_title {
-    margin-bottom: 30rpx;
+
+/* topBox */
+.topBox {
+    float: left;
 }
 
-.gasolinePrice, .gasolineAmount, .tripAmount {
-    margin: 10rpx 0;
+.top-left, .top-right{
+    width: 100%;
 }
 
-.spending {
-    font-size:24px;
+.top-left .car {
+    color: green;
+}
+
+.top-right .place {
+    text-align: right;
     color: red;
 }
 
-.main_title {
-    margin-bottom: 20rpx;
+.piker {
+    text-align: end;
 }
 
-.calculate {
-    margin-top: 100px;
+
+/* mainBox */
+.content {
+    margin-bottom: 30rpx;
 }
 
-.results {
-    margin-top: 20rpx;
-    display: block;
+.content .price, .oil, trip {
+    margin-bottom: 30rpx;
 }
 
-.selection {
-    width: 100%;
-    height: 60rpx;
+.unit-price, .oil, .trip {
+    display: flex;
+    align-items: center;
+}
+
+.unit-price input, .oil input, .trip input {
+    display: inline-block;
+}
+
+
+.cost {
+    position: absolute;
+    top: 40%
+}
+
+.spending {
+    color: red;
+}
+
+
+/* bottomBox */
+.bottomBox button {
+    margin:0;
+    position: absolute;
+    top: 50%;
 }

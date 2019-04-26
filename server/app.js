@@ -1,12 +1,12 @@
 const Koa = require('koa');
 const path = require('path');
+const sql = require('./lib/sql');
 const json = require('koa-json');
 const render = require('koa-ejs');
-const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 
 const app = new Koa();
-const router = new Router();
+
 
 
 app.use(json());
@@ -37,6 +37,9 @@ router.post("/index", async (ctx) => {
 router.post("/user", async (ctx) => {
     const userInfo = ctx.request.body;
     console.log(userInfo);
+    const data = [userInfo.nickname, userInfo.gender, userInfo.avatarUrl, userInfo.city, userInfo.country, userInfo.province];
+    const addUserPromise = sql.addUser(data);
+    await addUserPromise;
     ctx.body = {msg: "成功"};
 });
 
