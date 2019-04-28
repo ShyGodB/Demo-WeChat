@@ -9,34 +9,34 @@
         </view>
 
         <view class="top-right top">
-            <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
-                <view class="picker place">
-                    {{userSet === true? region[1] : defaultPlace}}
-                </view>
-            </picker>
+            <view class="picker place">
+                {{location.city}}
+            </view>
         </view>
     </view>
 
     <view class="mainBox">
         <view class="content">
             <view class="price">
-                <picker mode="selector" bindchange="bindPickerChange" value="{{index}}" range="{{gasoline}}" range-key="type">
+                <picker mode="selector" bindchange="chooseGasoline" value="{{index}}" range="{{gasoline}}" range-key="type">
                     <view class="picker">
-                    种类：{{onOff === true? gasoline[index].type : gasolineType}}
+                        种类：{{isType !== true? gasoline[index].type : defaultData.gasolineType}}
                     </view>
                 </picker>
 
                 <view class="unit-price">
                     <text> 单价： </text>
-                    <input class="gasolinePrice" bindinput='changePrice' id="{{index}}" value="{{onOff === true? gasoline[index].price : gasolinePrice}}" type="digit" placeholder="当前油价" placeholder-class="place-price" disabled></input>
-                    <image src="/images/pen.svg" style="width:32rpx;height:32rpx"></image>
+                    <input class="gasolinePrice" bindinput='changePrice' id="{{index}}" value="{{isPrice !== true? gasoline[index].price : defaultData.gasolinePrice}}" type="digit" placeholder="当前油价" disabled="{{editPrice}}"></input>
+                    <image src="/images/pen.svg" wx:if="{{editPrice === true}}" bindtap="beEditedPrice" style="width:32rpx;height:32rpx"></image>
+                    <text wx:if="{{showPrice === true}}" data-name="price" bindtap="setPrice"> 确定 </text>
                 </view>            
             </view>
 
             <view class="oil">
                 <text> 油耗：</text>
-                <input class="gasolineAmount" bindinput='changeAmount' value="{{amount}}" type="digit" placeholder="每公里耗油" placeholder-class='place-amount'></input>
-                <image src="/images/pen.svg" style="width:32rpx;height:32rpx"></image>
+                <input class="gasolineAmount" bindinput='changeAmount' value="{{defaultData.carSpend.length !== 0 ? defaultData.carSpend:''}}" type="digit" placeholder="每百公里耗油" disabled="{{editSpend}}"></input>
+                <image src="/images/pen.svg" wx:if="{{editSpend === true}}" bindtap="beEditedSpend" style="width:32rpx;height:32rpx"></image>
+                <text wx:if="{{showSpend === true}}" data-name="spend" bindtap="setSpend"> 确定 </text>
             </view>
 
             <view class="trip">
@@ -48,7 +48,7 @@
         <view class="cost" wx:if="{{result.length !== 0}}"> 
             <text> 结果: </text>
             <text class="spending"> {{result}} </text> 
-            <text> 元 </text>
+            <text> ¥ </text>
         </view>
     </view>
 

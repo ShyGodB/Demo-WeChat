@@ -2,6 +2,11 @@ const app = getApp()
 
 Page({
     data: {
+        // 页面加载时的预设数据
+        location: {
+            city: '',
+            province: '',
+        },
         gasoline: [
             {
                 type: '0#',
@@ -38,26 +43,141 @@ Page({
                 price: 7
             }
         ],
+        // 用户默认数据
+        defaultData:{
+            carId: '',
+            carName: '',
+            carType: '',
+            carSpend: '',
+            gasolineType: '92#',
+            gasolinePrice: '7.01',
+            province: '广东',
+            place: '深圳'
+        },
+        // 系统默认数据
         car: "Car",
         user: "true",
         index: "",
+
+        price: "",
         amount: "",
         trip: "",
-        result: "",
-        gasolineType: "89#",
-        gasolinePrice: "7.01",
-        place: "广东",
-        onOff: false,
-        defaultPlace: '深圳',
+
+        cost: "",
         region: ['','深圳',''],
         customItem: '全部',
-        userSet: false,
         cars:['hat'],
-        add: '添加'
+        add: '添加',
+        updateTime: '',
+        // Boolean
+        userSet: false,
+        onOff: false,
+        isType: false,
+        isPrice: false,
+        isPlace: false,
+        editPrice: true,
+        editSpend: true,
+        showPrice: false,
+        showSpend: false
     },
-    changePlace(ev) {
-        console.log(ev);
-    }, 
+    beEditedPrice() {
+        this.setData({
+            editPrice: false,
+            showPrice: true
+        })
+    },
+    beEditedSpend() {
+        this.setData({
+            editSpend: false,
+            showSpend: true
+        })
+    },
+    setPrice(ev) {
+        const name = ev.currentTarget.dataset.name;
+        const value = this.data.price;
+        const userId = app.globalData.userInfo.id;
+        // console.log(userId);
+        const data = [userId, name, value];
+        console.log(data);
+        this.setData({
+            editPrice: true,
+            showPrice: false
+        });
+        wx.showModal({
+            title: '提示',
+            content: '是否将当前值更新为默认值',
+            success(res) {
+                if (res.confirm) {
+                    const url = 'https://www.tripspend.com:8888/updateUser';
+                    if(value.length !== 0) {
+                        wx.request({
+                            url: url,
+                            method: "post",
+                            data: data,
+                            header: {
+                                "Content-Type": "application/json"
+                            },
+                            success: (res) => {
+                                console.log(res.data);
+                            },
+                            fail: (err) => {
+                                console.log(err);
+                            },
+                            complete: () => {
+                                // console.log("完成");
+                            }
+                        });
+                    } else {
+                        console.log("内容不能为空");
+                    }
+                } else {
+                    console.log('用户点击取消')
+                }
+            }
+        })
+    },
+    setSpend(ev) {
+        const name = ev.currentTarget.dataset.name;
+        const value = this.data.amount;
+        const userId = app.globalData.userInfo.id;
+        // console.log(userId);
+        const data = [userId, name, value];
+        console.log(data);
+        this.setData({
+            editSpend: true,
+            showSpend: false
+        });
+        wx.showModal({
+            title: '提示',
+            content: '是否将当前值更新为默认值',
+            success(res) {
+                if (res.confirm) {
+                    const url = 'https://www.tripspend.com:8888/updateUser';
+                    if (value.length !== 0) {
+                        wx.request({
+                            url: url,
+                            method: "post",
+                            data: data,
+                            header: {
+                                "Content-Type": "application/json"
+                            },
+                            success: (res) => {
+                                console.log(res.data);
+                            },
+                            fail: (err) => {
+                                console.log(err);
+                            },
+                            complete: () => {
+                                // console.log("完成");
+                            }
+                        });
+                    }
+                } else {
+                    console.log('用户点击取消')
+                }
+            }
+        })
+    },
     changePrice(ev) {
         this.setData({
             price: ev.detail.value
@@ -73,40 +193,50 @@ Page({
             trip: ev.detail.value
         });
     },
-    calculate(ev) {
-        const index = Number(this.data.index);
-        const price = this.data.gasoline[index].price;
-        const amount = Number(this.data.amount);
-        const trip = Number(this.data.trip);
-        this.setData({
-            result: price * amount * trip
-        });
-    },
+    // calculate(ev) {
+    //     const price = Number(this.data.price);
+    //     console.log(app.globalData.userInfo)
+    //     const amount = Number(this.data.amount/100);
+    //     const trip = Number(this.data.trip);
+    //     const result = price * amount * trip;
+    //     console.log(price,amount,trip)
+    //     this.setData({
+    //         result: result.toFixed(2)
+    //     });
+    // },
     changeCar(e) {
         this.setData({
             index: e.detail.value
         })
     },
-    bindPickerChange(e) {
+    chooseGasoline(ev) {
         // console.log('picker发送选择改变，携带值为', e.detail.value)
+        const i = Number(ev.detail.value);
         this.setData({
-            onOff: true,
-            index: e.detail.value
+            isType: false,
+            isPrice: false,
+            index: ev.detail.value,
+            price: this.data.gasoline[i].price
         })
     },
     uploadData() {
-        const that = this;
-        const index = Number(this.data.index);
-        const price = this.data.gasoline[index].price;
-        const amount = Number(this.data.amount);
+        const price = Number(this.data.price);
+        const amount = Number(this.data.amount / 100);
         const trip = Number(this.data.trip);
-        const result = price * amount * trip;
-        console.log(result);
+        const cost = price * amount * trip;
+        console.log(price, amount, trip)
+        this.setData({
+            result: result.toFixed(2)
+        });
         wx.request({
-            url: "https://www.tripspend.com:8888/index",
+            url: "https://www.tripspend.com:8888/addTripRecord",
             method: "post",
             data: {
-                result: result
+                userId: app.globalData.userInfo.id,
+                price: price,
+                amount: amount,
+                trip: trip,
+                cost: cost
             },
             header: {
                 "Content-Type": "application/json"
@@ -128,41 +258,130 @@ Page({
     bindRegionChange(e) {
         // console.log('picker发送选择改变，携带值为', e.detail.value)
         this.setData({
-            userSet: true,
+            isPlace: true,
             region: e.detail.value
         })
+    },
+    onLoad() {
+        // 获取用户位置信息
+        wx.getLocation({
+            type: 'wgs84',
+            success: (res) => {
+                const latitude = res.latitude; // 纬度
+                const longitude = res.longitude; // 经度
+                const url = `https://apis.map.qq.com/ws/geocoder/v1/?location=${latitude},${longitude}&key=LUVBZ-4AW34-6YIUD-XKC7G-QSZKK-SBFCQ`;
+                wx.request({
+                    url: url,
+                    method: "GET",
+                    header: {
+                        "Content-Type": "application/json"
+                    },
+                    success: (res) => {
+                        const city = res.data.result.address_component.city;
+                        const province1 = res.data.result.address_component.province;
+                        const province = province1.substring(0, province1.length - 1)
+                        this.setData({
+                            location: {
+                                city: city.substring(0, city.length - 1),
+                                province: province
+                            }
+                        });
+
+                        // 获取油价信息
+                        const url1 = `https://api.jisuapi.com/oil/query?appkey=62ea23ffe7a3a991&province=${province}`;
+                        console.log(url1)
+                        wx.request({
+                            url: url1,
+                            method: "get",
+                            header: {
+                                "Content-Type": "application/json"
+                            },
+                            success: (res) => {
+                                console.log(res.data);
+                                this.setData({
+                                    updateTime: res.data.result.updatetime,
+                                    gasoline: [
+                                        {
+                                            type: '0#',
+                                            price: res.data.result.oil0
+                                        },
+                                        {
+                                            type: '89#',
+                                            price: res.data.result.oil89
+                                        },
+                                        {
+                                            type: '90#',
+                                            price: res.data.result.oil90
+                                        },
+                                        {
+                                            type: '92#',
+                                            price: res.data.result.oil92
+                                        },
+                                        {
+                                            type: '93#',
+                                            price: res.data.result.oil93
+                                        }
+                                        ,
+                                        {
+                                            type: '95#',
+                                            price: res.data.result.oil95
+                                        }
+                                        ,
+                                        {
+                                            type: '97#',
+                                            price: res.data.result.oil97
+                                        },
+                                        {
+                                            type: '98#',
+                                            price: res.data.result.oil98
+                                        }
+                                    ]
+                                });
+                            },
+                            fail(err) {
+                                console.log(err);
+                            },
+                            complete() {
+                                // console.log("完成");
+                            }
+                        });
+                    },
+                    fail(err) {
+                        console.log(err);
+                    },
+                    complete() {
+                        // getOilInfo();
+                        console.log("完成");
+                        
+                    }
+
+                });
+            }
+        });
+        
+        
+        const user = app.globalData.userInfo;
+        this.setData({
+            isType: true,
+            isPrice: true,
+            price: user.price,
+            amount: user.car_spend,
+            defaultData: {
+                carId: user.car_id,
+                carName: user.car_name,
+                carType: user.car_type,
+                carSpend: user.car_spend,
+                gasolineType: user.gasoline,
+                gasolinePrice: user.price,
+                province: user.province,
+                place: user.city  
+            }
+        });
+        console.log(app.globalData.userInfo);
+        
+        
     }
-    // onLoad() {
-    //     const that = this;
-    //     const place = that.data.place;
-    //     const url = `https://api.jisuapi.com/oil/query?appkey=62ea23ffe7a3a991&province=${place}`;
-    //     wx.request({
-    //         url: url,
-    //         method: "get",
-    //         header: {
-    //             "Content-Type": "application/json"
-    //         },
-    //         success(res) {
-    //             console.log(res.data.result);
-    //             that.setData({
-    //                 gasoline: res.data.result,
-    //                 place: res.data.result.province
-    //             });
-    //             console.log(that.data.gasoline)
-    //         },
-    //         fail(err) {
-    //             console.log(err);
-    //         },
-    //         complete() {
-    //             console.log("完成");
-    //             // that.setData({
-    //             //     gasolineType: that.data.gasoline[0].type,
-    //             //     gasolinePrice: that.data.gasoline[0].price
-    //             // });
-    //         }
-    //     });
-    // }
-})
+});
 
 
 /*
