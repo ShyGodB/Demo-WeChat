@@ -11,15 +11,15 @@ const promisePool = pool.promise();
 
 const object = {
 
-    async addTripRecord(data) {
-        const sql = "insert into record_driving(user_id, price, amount, trip, cost) values(?, ?, ?, ?, ?)";
+    async addGasolineRecord(data) {
+        const sql = "insert into record_gasoline(user_id, price, num, cost) values(?, ?, ?, ?)";
         await promisePool.query(sql, data);
     },
 
-    async getTripRecord(data) {
-        const sql = "select * from record_driving where user_id=?";
+    async listGasolineRecord(data) {
+        const sql = "select * from record_gasoline where user_id=?";
         const [rows, fields] = await promisePool.query(sql, data);
-	return rows;
+        return rows;
     }
 
 };

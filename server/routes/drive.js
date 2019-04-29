@@ -3,7 +3,7 @@ const drive = require('../lib/drive');
 const router = new Router();
 
 
-// 更行用户出行记录
+// 添加用户出行记录
 router.post("/addTripRecord", async (ctx) => {
     const uploadedData = ctx.request.body;
     const userId = uploadedData.userId;
@@ -15,6 +15,17 @@ router.post("/addTripRecord", async (ctx) => {
     console.log(data);
     const addTripRecordPromise = drive.addTripRecord(data);
     await addTripRecordPromise;
+    ctx.body = {cost: cost}
 });
+
+// 获取用户出行记录
+router.post("/getUserTripRecord", async (ctx) => {
+    const userId = ctx.request.body.userId;
+    const getTripRecordPromise = drive.getTripRecord(userId);
+    const rows = await getTripRecordPromise;
+    ctx.body = rows;
+});
+
+
 
 module.exports = router;

@@ -6,6 +6,8 @@ const bodyParser = require('koa-bodyparser');
 
 const userRouter = require('./routes/user');
 const driveRouter = require('./routes/drive');
+const addRouter = require('./routes/add');
+const indexRouter = require('./routes/index');
 
 const app = new Koa();
 
@@ -28,6 +30,8 @@ render(app, {
 // 配置路由模块
 app.use(userRouter.routes()).use(userRouter.allowedMethods());
 app.use(driveRouter.routes()).use(driveRouter.allowedMethods());
+app.use(addRouter.routes()).use(addRouter.allowedMethods());
+app.use(indexRouter.routes()).use(indexRouter.allowedMethods());
 
 
 app.listen(8080, () => {

@@ -2,10 +2,6 @@ const Router = require('koa-router');
 const user = require('../lib/user');
 const router = new Router();
 
-// 请求主页
-router.get("/", async (ctx) => {
-     await ctx.render("index");
-});
 
 
 // 新增用户
@@ -21,7 +17,7 @@ router.post("/addUser", async (ctx) => {
 });
 
 // 获取所有用户信息
-router.get("/getAllUser", async (ctx) => {
+router.post("/listAllUser", async (ctx) => {
     const listAllUserPromise = user.listAllUser();
     const userInfoArray = await listAllUserPromise;
     // console.log(userInfoArray);
@@ -29,9 +25,9 @@ router.get("/getAllUser", async (ctx) => {
 });
 
 // 获取单个用户信息
-router.get("/getUser", async (ctx) => {
-    const data = 1;
-    const getUserPromise = user.getUser(data);
+router.post("/getUser", async (ctx) => {
+    const id = ctx.request.body.id;
+    const getUserPromise = user.getUser(id);
     const userInfo = await getUserPromise;
     // console.log(userInfo);
     ctx.body = userInfo;
