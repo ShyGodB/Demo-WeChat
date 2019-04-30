@@ -11,20 +11,20 @@ const promisePool = pool.promise();
 
 const object = {
     async addUser(data) {
-        const sql = "insert into user(nickname, gender, avatarUrl, city, country, province) values(?, ?, ?, ?, ?, ?)";
+        const sql = "insert into user(nickname, gender, avatarUrl, city, country, province, openid, session_key) values(?, ?, ?, ?, ?, ?, ?, ?)";
         await promisePool.query(sql, data);
     },
 
-    async listAllUser() {
-        const sql = "select * from user";
+    async listAllOpenid() {
+        const sql = "select openid from user";
         const [rows, field] = await promisePool.query(sql);
 	return rows;
     },
 
     async getUser(data) {
-        const sql = "select * from user where id = ?";
+        const sql = "select * from user where openid = ?";
         const [rows, field] = await promisePool.query(sql, data);
-        return rows[0];
+        return rows;
     },
 
     async updateCarSpend(data) {
